@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <br /><br />
+    <br /><br /><br /><br /><br /><br />
     <div class="row">
       <div class="col-sm-4">
 
@@ -13,7 +13,7 @@
           <div class="switch">
               <label>
                   <label class="fw-bold">OFF</label>
-                  <input type="checkbox" :value="restyle_switch" checked="checked" @change="WriteOut()">
+                  <input type="checkbox" :value="restyle_switch" checked="checked" @change="ToggleLookAndFeel()">
                   <span class="lever"></span><label class="fw-bold text-success">ON</label>
               </label>
           </div>
@@ -35,6 +35,7 @@
       </div>
     </div>
 
+    <br />
     <!-- Second Row -->
     <div class="row">
       <div class="col-sm-4">
@@ -43,8 +44,8 @@
       <div class="col-sm-4">
         <div class="form-group">
           <div class="d-grid gap-2">
-            <button type="submit"  class="btn shadow-sm btn-success rounded-0" id="btn_submit" @click="StartCalculator()" >
-                Start Calculator 
+            <button type="submit"  class="btn shadow p-3 btn-success btn-lg"   @click="StartCalculator()" >
+                Start Calculator <font-awesome-icon :icon="['fas', 'calculator']" beat style="color: #ffffff;" />
             </button> 
           </div>
         </div>
@@ -54,16 +55,16 @@
       </div>
     </div>
 
-    <!-- The Modal begins Here -->
+    <!-- The Modal1 begins Here, Gets triggered when the look and feel swtich is turned on -->
     <div id="LoadingModal" ref="Modal1" class="modal fade" > 
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header text-bg-danger">		
             <img src="@/assets/gl-logo-white.png" width="50" height="49" />			
               <h4 class="modal-title">GL Assessment Modal Calculator</h4>
-              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" @click="HandleModalClosure()"></button>
           </div>
-          <div class="modal-body"> 		
+          <div class="modal-body shadow p3"> 		
 						<!-- Here The Design of the Calculator takes place -->
             <center>
               <div class="CalculatorLayout">
@@ -93,20 +94,19 @@
       </div>
     </div>
 
-    <!-- The Modal begins Here -->
+    <!-- The Modal2 begins Here, Gets triggered when the look and feel swtich is turned off -->
     <div id="LoadingModal" ref="Modal2" class="modal fade" > 
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header text-bg-danger">		
-            <img src="@/assets/gl-logo-white.png" width="50" height="49" />			
-              <h4 class="modal-title">GL Assessment Modal Calculator</h4>
-              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            GL Assessment Modal Calculator
+              <button type="button" class="btn-close" data-bs-dismiss="modal" @click="HandleModalClosure()"></button>
           </div>
           <div class="modal-body"> 		
 						<!-- Here The Design of the Calculator takes place -->
             <center>
               <div class="CalculatorLayout">
-                <div class="CalculatorScreen">{{screen || 0}}</div>
+                <div class="CalculatorScreen2">{{screen || 0}}</div>
                 <div @click="Append('7')" >7</div>
                 <div @click="Append('8')" >8</div>
                 <div @click="Append('9')" >9</div>
@@ -119,13 +119,13 @@
                 <div @click="Append('2')" >2</div>
                 <div @click="Append('3')" >3</div>
                 <div @click="EqualClicked()" class=" CenterEqualTo">=</div>
-                <div @click="Append('0')"  >0</div>
+                <div @click="Append('0')" class="CenterZero" >0</div>
                 <div @click="Clear()">C</div>
               </div>
             </center>
             <!-- End of Calculator Design -->
 					</div>
-					<div class="modal-footer text-bg-secondary">
+					<div class="modal-footer text-dark">
 						&copy; 2023 Designed by Yassir Yahaya
 					</div>
         </div>
@@ -144,7 +144,6 @@ export default {
         return{
             header: "GL Assessment Modal Calculator",
             csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-            element:null,
             restyle_switch: false, //A boolean variable for storing the value of look and feel switch
             num_1: null, //Number entered before operator is clicked
             num_2: null, //Number entered after operator is clicked
@@ -156,7 +155,7 @@ export default {
         }
     },
     methods:{
-      StartCalculator(){
+      StartCalculator(){ //Gets triggered when the green button is clicked to start the calculator
             let element = null
             if(this.restyle_switch)
               element = this.$refs.Modal1;
@@ -167,7 +166,10 @@ export default {
       ToggleLookAndFeel(){ //This get called when the switch is toggled
         this.restyle_switch = !(this.restyle_switch);
       },
-      Clear(){ //Troggered when C is clicked
+      HandleModalClosure(){ //Gets triggered when the modal is closed
+        this.Clear();
+      },
+      Clear(){ //Triggered when C is clicked
         this.screen = '';
         this.operatorSet = false;
         this.operator = '';
@@ -203,13 +205,13 @@ export default {
           this.screen = this.screen + operator;
         }
       },
-      EqualClicked(){
+      EqualClicked(){ //Gets triggered when the = button is clicked
         if(this.num_1 == null || this.num_2 == null || this.operator == null){
           alert("Please enter two numbers separated by an operand before clicking '=' ");
         }
         else{
           const config = {
-              headers : {
+              headers : { //To address CORS issues from the requester
                 'Content-type': 'application/json; charset=utf-8',
                 'Access-Control-Allow-Origin': '*'
               }
@@ -264,7 +266,7 @@ export default {
 </script>
 
 <style scoped>
-.CalculatorLayout{
+.CalculatorLayout{ /* Grid layout of the calculator */
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-auto-rows: minmax(50px, auto);
@@ -273,28 +275,27 @@ export default {
   margin: 0 auto;
   width: 300px;
 }
-.CalculatorScreen{
+.CalculatorScreen{ /* Screen color and layout of the calculator's screen (look and feel ON)*/
   background-color: rgb(199, 224, 245);
   grid-column: 1/5;
 }
 
-.CenterZero{
+.CalculatorScreen2{ /* Screen color and layout of the calculator's screen (look and feel OFF)*/
+  border: 1px solid #999999;
+  grid-column: 1/5;
+}
+
+.CenterZero{ /*Makes 0 in the middle */
   grid-column: 1/4;
 }
 
-.CenterEqualTo
-{
-  grid-column-start: 4;
-  grid-column-end:   5;
-}
-
-.CalculatorButton{
+.CalculatorButton{ /* Button css for calculator when switch is ON */
   background-color: #DDDDDD;
   color: maroon;
   border: 1px solid #444444;
 }
 
-.CalculatorOperands{
+.CalculatorOperands{ /*CSS for the symbols/operators */
   background-color: goldenrod;
   color: whitesmoke
 }
