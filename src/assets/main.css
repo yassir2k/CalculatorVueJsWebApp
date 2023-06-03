@@ -1,0 +1,74 @@
+.gl-header{
+    background: #dc3545;
+    border-bottom: 2px solid #d70000;
+	height: 60px
+}
+.page-footer 
+   {
+       width: 100%;
+       bottom: 0px;
+       background-color: #5e5e5e;
+   }
+/**********************************************************************************************************************
+SWITCH
+**********************************************************************************************************************/
+.switch label input[type="checkbox"]{
+	opacity:0;
+	width:0;
+	height:0
+	}
+.switch label input[type="checkbox"]:checked+.lever{
+background-color:#a8e2b8
+}
+.switch label input[type="checkbox"]:checked+.lever:after{
+left:1.5rem;background-color:rgb(13, 161, 63)
+}
+.switch label input[type="checkbox"]:checked:not(:disabled) ~ .lever:active:after{
+-webkit-box-shadow:0 .0625rem .1875rem .0625rem rgba(0,0,0,0.4),0 0 0 .9375rem rgba(170,102,204,0.1);
+box-shadow:0 .0625rem .1875rem .0625rem rgba(0,0,0,0.4),0 0 0 .9375rem rgba(170,102,204,0.1)
+}
+.switch label input[type="checkbox"]:not(:disabled) ~ 
+.lever:active:after{
+-webkit-box-shadow:0 .0625rem .1875rem .0625rem rgba(0,0,0,0.4),0 0 0 .9375rem rgba(0,0,0,0.08);
+box-shadow:0 .0625rem .1875rem .0625rem rgba(0,0,0,0.4),0 0 0 .9375rem rgba(0,0,0,0.08)
+}
+.switch label input[type="checkbox"]:disabled+.lever{
+cursor:default
+}
+.switch label input[type="checkbox"]:disabled+.lever:after,
+.switch label input[type="checkbox"]:disabled:checked+.lever:after{
+/*background-color:#bdbdbd*/
+background-color:#bdbdbd
+}
+.switch label .lever{
+position:relative;
+display:inline-block;
+margin:0 1rem;
+margin-right:.625rem;
+vertical-align:middle;
+content:"";
+/*background-color:#818181;*/
+background-color:#FF0000;
+border-radius:.9375rem;
+width:2.5rem;
+height:.9375rem;
+-webkit-transition:background .3s ease;
+transition:background .3s ease
+}
+.switch label .lever:after{
+position:absolute;
+top:-.1875rem;
+left:-.3125rem;
+display:inline-block;
+content:"";
+background-color:#FFDDDD;
+border-radius:1.3125rem;
+-webkit-box-shadow:0 .0625rem .1875rem .0625rem rgba(0,0,0,0.4);
+box-shadow:0 .0625rem .1875rem .0625rem rgba(0,0,0,0.4);
+width:1.3125rem;
+height:1.3125rem;
+-webkit-transition:left .9s ease,background .9s ease,-webkit-box-shadow 1s ease;
+transition:left .9s ease,background .9s ease,-webkit-box-shadow 1s ease;
+transition:left .9s ease,background .9s ease,box-shadow 1s ease;
+transition:left .9s ease,background .9s ease,box-shadow 1s ease,-webkit-box-shadow 1s ease
+}
